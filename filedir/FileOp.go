@@ -24,18 +24,22 @@ func TraverseDir(dirPth string, fileList *list.List) error {
 }
 
 //递归文件夹获取到所有文件名称
-func TraverseDirBySlice(dirPth string, fileList []string) error {
+func TraverseDirBySlice(dirPth string) ([]string, error) {
 	dir, err := ioutil.ReadDir(dirPth)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	PthSep := string(os.PathSeparator)
+
+	var curFile []string
 	for _, fi := range dir {
 		if fi.IsDir() { // 忽略目录
-			TraverseDirBySlice(dirPth+PthSep+fi.Name(), fileList)
+			down, _ := TraverseDirBySlice(dirPth + PthSep + fi.Name())
+			curFile = append(curFile, down...)
 		} else {
-			fileList = append(fileList, dirPth+PthSep+fi.Name())
+			curFile = append(curFile, dirPth+PthSep+fi.Name())
 		}
 	}
-	return nil
+
+	return curFile, nil
 }

@@ -1,4 +1,4 @@
-package com_niexq_gotools_file
+package filedir
 
 import (
 	"container/list"

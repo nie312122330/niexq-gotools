@@ -7,7 +7,7 @@ import (
 )
 
 //递归文件夹获取到所有文件名称
-func traverseDir(dirPth string,fileList *list.List) error {
+func TraverseDir(dirPth string, fileList *list.List) error {
 	dir, err := ioutil.ReadDir(dirPth)
 	if err != nil {
 		return err
@@ -15,9 +15,9 @@ func traverseDir(dirPth string,fileList *list.List) error {
 	PthSep := string(os.PathSeparator)
 	for _, fi := range dir {
 		if fi.IsDir() { // 忽略目录
-			traverseDir(dirPth + PthSep + fi.Name(),fileList)
-		}else{
-			fileList.PushBack(dirPth+PthSep+fi.Name())
+			TraverseDir(dirPth+PthSep+fi.Name(), fileList)
+		} else {
+			fileList.PushBack(dirPth + PthSep + fi.Name())
 		}
 	}
 	return nil

@@ -6,7 +6,10 @@ import (
 	"os"
 )
 
-//递归文件夹获取到所有文件名称
+/*TraverseDir 递归文件夹获取到所有文件名称
+ *
+ *  dirPth 目录
+ */
 func TraverseDir(dirPth string, fileList *list.List) error {
 	dir, err := ioutil.ReadDir(dirPth)
 	if err != nil {
@@ -23,7 +26,10 @@ func TraverseDir(dirPth string, fileList *list.List) error {
 	return nil
 }
 
-//递归文件夹获取到所有文件名称
+/*TraverseDir 递归文件夹获取到所有文件名称
+ *
+ *  dirPth 目录
+ */
 func TraverseDirBySlice(dirPth string) ([]string, error) {
 	dir, err := ioutil.ReadDir(dirPth)
 	if err != nil {

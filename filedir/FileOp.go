@@ -25,7 +25,7 @@ func CheckFileIsExist(filename string) bool {
 func WriteFileContent(filename string, content string,append bool) (bool, error) {
 	dir:=filepath.Dir(filename)
 	if !CheckFileIsExist(dir) {
-		os.Mkdir(dir,os.ModePerm)
+		os.MkdirAll(dir,os.ModePerm)
 	}
 	//如果不是追加模式，则删除旧文件再写入
 	if !append {

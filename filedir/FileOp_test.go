@@ -9,7 +9,7 @@ func Test_CheckFileIsExist(t *testing.T) {
 }
 
 func Test_WriteFileContent(t *testing.T) {
-	_,er:=WriteFileContent("D:/aaa/aaa.txt","2222",false)
+	_,er:=WriteFileContent("D:/aaa/aaa/aaa/aaa.txt","2222",false)
 	if nil!=er{
 		t.Error(er)
 	}

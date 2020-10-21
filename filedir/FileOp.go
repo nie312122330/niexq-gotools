@@ -1,10 +1,54 @@
 package filedir
 
 import (
+	"bufio"
 	"container/list"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 )
+
+/*CheckFileIsExist 判断文件是否存在
+ * Return  存在返回 true 不存在返回false
+ */
+func CheckFileIsExist(filename string) bool {
+	var exist = true
+	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		exist = false
+	}
+	return exist
+}
+
+/*WriteFileContent 写入文件内容，目录|文件不存在则创建目录|文件
+ * Return  存在返回 true 不存在返回false
+ */
+func WriteFileContent(filename string, content string,append bool) (bool, error) {
+	dir:=filepath.Dir(filename)
+	if !CheckFileIsExist(dir) {
+		os.Mkdir(dir,os.ModePerm)
+	}
+	//如果不是追加模式，则删除旧文件再写入
+	if !append {
+		os.Remove(filename)
+	}
+	var flag int
+	if append {
+		flag= os.O_RDWR|os.O_CREATE|os.O_APPEND
+	}else {
+		flag= os.O_RDWR|os.O_CREATE
+	}
+	outputFile, err := os.OpenFile(filename, flag, 0666)
+	if err != nil {
+		return false, err
+	}
+	defer outputFile.Close()
+	outputWriter := bufio.NewWriter(outputFile)
+	defer outputWriter.Flush()
+	//写入内容
+	outputWriter.WriteString(content)
+	return true, nil
+}
+
 
 /*TraverseDir 递归文件夹获取到所有文件名称
  *

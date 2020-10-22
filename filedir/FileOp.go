@@ -3,6 +3,7 @@ package filedir
 import (
 	"bufio"
 	"container/list"
+	"errors"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -20,6 +21,7 @@ func CheckFileIsExist(filename string) bool {
 }
 
 /*WriteFileContent 写入文件内容，目录|文件不存在则创建目录|文件
+ *
  * Return  存在返回 true 不存在返回false
  */
 func WriteFileContent(filename string, content string, append bool) (bool, error) {
@@ -48,6 +50,23 @@ func WriteFileContent(filename string, content string, append bool) (bool, error
 	outputWriter.WriteString(content)
 	return true, nil
 }
+
+
+/*ReadFileContent 读取文本文件内容
+ *
+ */
+func ReadFileContent(filename string) ([]byte ,error) {
+	if !CheckFileIsExist(filename) {
+		return nil,errors.New("文件不存在")
+	}
+	//ReadFile函数会读取文件的全部内容，并将结果以[]byte类型返回
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil,err
+	}
+	return data,nil
+}
+
 
 /*TraverseDir 递归文件夹获取到所有文件名称
  *

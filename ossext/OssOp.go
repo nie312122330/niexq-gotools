@@ -2,16 +2,18 @@ package ossop
 
 import (
 	"errors"
+	"fmt"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	"github.com/nie312122330/niexq-gotools/logext"
 	"go.uber.org/zap"
 	"io"
 	"strings"
 )
 
-var logger zap.Logger
+var logger *zap.Logger
 
 func init() {
-
+	logger = logext.LogLogger()
 }
 
 //OssConf 配置文件
@@ -71,6 +73,7 @@ func DelObject(bucket *oss.Bucket, key string) error {
 			return err
 		}
 		if !empty {
+			logger.Warn(fmt.Sprintf("目录%s非空", key))
 			return errors.New("目录非空")
 		}
 	}

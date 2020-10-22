@@ -9,9 +9,8 @@ import (
 	"path/filepath"
 )
 
-/*CheckFileIsExist 判断文件是否存在
- * Return  存在返回 true 不存在返回false
- */
+//CheckFileIsExist 判断文件是否存在
+//  Return  存在返回 true 不存在返回false
 func CheckFileIsExist(filename string) bool {
 	var exist = true
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
@@ -20,10 +19,8 @@ func CheckFileIsExist(filename string) bool {
 	return exist
 }
 
-/*WriteFileContent 写入文件内容，目录|文件不存在则创建目录|文件
- *
- * Return  存在返回 true 不存在返回false
- */
+//WriteFileContent 写入文件内容，目录|文件不存在则创建目录|文件
+//  Return  存在返回 true 不存在返回false
 func WriteFileContent(filename string, content string, append bool) (bool, error) {
 	dir := filepath.Dir(filename)
 	if !CheckFileIsExist(dir) {
@@ -51,38 +48,30 @@ func WriteFileContent(filename string, content string, append bool) (bool, error
 	return true, nil
 }
 
-
-/*ReadFileContent 读取文本文件内容
- *
- */
-func ReadFileByte(filename string) ([]byte ,error) {
+//ReadFileContent 读取文本文件内容
+func ReadFileByte(filename string) ([]byte, error) {
 	if !CheckFileIsExist(filename) {
-		return nil,errors.New("文件不存在")
+		return nil, errors.New("文件不存在")
 	}
 	//ReadFile函数会读取文件的全部内容，并将结果以[]byte类型返回
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
-	return data,nil
+	return data, nil
 }
 
-/*ReadFileContent 读取文本文件内容
- *
- */
-func ReadFileContent(filename string) (string ,error) {
-	data,err:=ReadFileByte(filename)
-	if nil!=err {
-		return "",err
+//ReadFileContent 读取文本文件内容
+func ReadFileContent(filename string) (string, error) {
+	data, err := ReadFileByte(filename)
+	if nil != err {
+		return "", err
 	}
-	return string(data),nil
+	return string(data), nil
 }
 
-
-/*TraverseDir 递归文件夹获取到所有文件名称
- *
- *  dirPth 目录
- */
+//TraverseDir 递归文件夹获取到所有文件名称
+//  dirPth 目录
 func TraverseDir(dirPth string, fileList *list.List) error {
 	dir, err := ioutil.ReadDir(dirPth)
 	if err != nil {
@@ -99,10 +88,8 @@ func TraverseDir(dirPth string, fileList *list.List) error {
 	return nil
 }
 
-/*TraverseDir 递归文件夹获取到所有文件名称
- *
- *  dirPth 目录
- */
+//TraverseDir 递归文件夹获取到所有文件名称
+//  dirPth 目录
 func TraverseDirBySlice(dirPth string) ([]string, error) {
 	dir, err := ioutil.ReadDir(dirPth)
 	if err != nil {

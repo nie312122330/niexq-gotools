@@ -1,4 +1,4 @@
-package ossop
+package ossext
 
 import (
 	"errors"

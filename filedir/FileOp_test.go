@@ -17,10 +17,10 @@ func Test_WriteFileContent(t *testing.T) {
 
 func TestReadFileContent(t *testing.T) {
 
-	str,err:=ReadFileContent("D:/aaa/aaa/aaa/aaa.txt")
-	if nil!=err {
+	str, err := ReadFileContent("D:/aaa/aaa/aaa/aaa.txt")
+	if nil != err {
 		t.Log(err.Error())
-	}else {
+	} else {
 		t.Log(str)
 	}
 

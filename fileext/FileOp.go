@@ -11,6 +11,12 @@ import (
 	"strings"
 )
 
+
+//JoinPath 拼接路径
+func JoinPath(items ...string) string {
+	return path.Join(items...)
+}
+
 //PathDir 获取文件的目录
 func PathDir(filePath string) string {
 	return strings.TrimSuffix(filePath, path.Base(filePath))

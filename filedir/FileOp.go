@@ -22,10 +22,10 @@ func CheckFileIsExist(filename string) bool {
 /*WriteFileContent 写入文件内容，目录|文件不存在则创建目录|文件
  * Return  存在返回 true 不存在返回false
  */
-func WriteFileContent(filename string, content string,append bool) (bool, error) {
-	dir:=filepath.Dir(filename)
+func WriteFileContent(filename string, content string, append bool) (bool, error) {
+	dir := filepath.Dir(filename)
 	if !CheckFileIsExist(dir) {
-		os.MkdirAll(dir,os.ModePerm)
+		os.MkdirAll(dir, os.ModePerm)
 	}
 	//如果不是追加模式，则删除旧文件再写入
 	if !append {
@@ -33,9 +33,9 @@ func WriteFileContent(filename string, content string,append bool) (bool, error)
 	}
 	var flag int
 	if append {
-		flag= os.O_RDWR|os.O_CREATE|os.O_APPEND
-	}else {
-		flag= os.O_RDWR|os.O_CREATE
+		flag = os.O_RDWR | os.O_CREATE | os.O_APPEND
+	} else {
+		flag = os.O_RDWR | os.O_CREATE
 	}
 	outputFile, err := os.OpenFile(filename, flag, 0666)
 	if err != nil {
@@ -48,7 +48,6 @@ func WriteFileContent(filename string, content string,append bool) (bool, error)
 	outputWriter.WriteString(content)
 	return true, nil
 }
-
 
 /*TraverseDir 递归文件夹获取到所有文件名称
  *

@@ -1,4 +1,4 @@
-package filedir
+package fileext
 
 import (
 	"bufio"
@@ -6,8 +6,30 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
+	"strings"
 )
+
+//PathDir 获取文件的目录
+func PathDir(filePath string) string {
+	return strings.TrimSuffix(filePath, path.Base(filePath))
+}
+
+//PathFileSuffix 获取文件后缀名
+func PathFileSuffix(filePath string) string {
+	return path.Ext(filePath)
+}
+
+//PathFileName 获取文件名字不包含后缀
+func PathFileName(filePath string) string {
+	return strings.TrimSuffix(PathFileNameWithSuffix(filePath), PathFileSuffix(filePath))
+}
+
+//PathFileNameWithSuffix 获取文件名字包含后缀
+func PathFileNameWithSuffix(filePath string) string {
+	return path.Base(filePath)
+}
 
 //CheckFileIsExist 判断文件是否存在
 //  Return  存在返回 true 不存在返回false

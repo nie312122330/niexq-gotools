@@ -55,7 +55,7 @@ func WriteFileContent(filename string, content string, append bool) (bool, error
 /*ReadFileContent 读取文本文件内容
  *
  */
-func ReadFileContent(filename string) ([]byte ,error) {
+func ReadFileByte(filename string) ([]byte ,error) {
 	if !CheckFileIsExist(filename) {
 		return nil,errors.New("文件不存在")
 	}
@@ -65,6 +65,17 @@ func ReadFileContent(filename string) ([]byte ,error) {
 		return nil,err
 	}
 	return data,nil
+}
+
+/*ReadFileContent 读取文本文件内容
+ *
+ */
+func ReadFileContent(filename string) (string ,error) {
+	data,err:=ReadFileByte(filename)
+	if nil!=err {
+		return "",err
+	}
+	return string(data),nil
 }
 
 

@@ -2,6 +2,8 @@ package httpext
 
 import (
 	"bytes"
+	"errors"
+	"fmt"
 	"github.com/nie312122330/niexq-gotools/jsonext"
 	"io/ioutil"
 	"net/http"
@@ -24,6 +26,9 @@ func Get(url string,timeOut time.Duration) ([]byte,error) {
 	resp, err := client.Get(url)
 	if err != nil {
 		return nil,err
+	}
+	if resp.StatusCode!=200 {
+		return nil,errors.New(fmt.Sprintf("返回非%d错误",resp.StatusCode))
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
@@ -53,6 +58,9 @@ func Post(url string, data interface{}, contentType string,timeOut time.Duration
 	resp, err := client.Post(url, contentType, bytes.NewBuffer(*jsonStr))
 	if err != nil {
 		return "",err
+	}
+	if resp.StatusCode!=200 {
+		return "",errors.New(fmt.Sprintf("返回非%d错误",resp.StatusCode))
 	}
 	defer resp.Body.Close()
 	result, _ := ioutil.ReadAll(resp.Body)

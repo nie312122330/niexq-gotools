@@ -5,15 +5,31 @@ import "encoding/json"
 func init() {
 
 }
+//ToStr 对象转换为Str
+//  t 任意对象，注意取地址传入
+func ToStrOk(t interface{}) string {
+	result, _ :=ToStr(t)
+	return result
+}
 
 //ToStr 对象转换为Str
 //  t 任意对象，注意取地址传入
 func ToStr(t interface{}) (string, error) {
-	jsonBytes, err := json.Marshal(&t)
+	jsonBytes, err :=ToJsonBytes(t)
 	if err != nil {
 		return "", err
 	}
-	return string(jsonBytes), nil
+	return string(*jsonBytes), nil
+}
+
+//ToJsonBytes 对象转换为[]byte
+//  t 任意对象，注意取地址传入
+func ToJsonBytes(t interface{}) (*[]byte, error) {
+	jsonBytes, err := json.Marshal(&t)
+	if err != nil {
+		return nil, err
+	}
+	return &jsonBytes, nil
 }
 
 //ToObj Str转换为对象

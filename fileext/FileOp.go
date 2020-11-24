@@ -50,6 +50,22 @@ func CheckFileIsExist(filename string) bool {
 //WriteFileContent 写入文件内容，目录|文件不存在则创建目录|文件
 //  Return  存在返回 true 不存在返回false
 func WriteFileContent(filename string, content string, append bool) (bool, error) {
+	return WriteFileByWriterFun(filename, func(outputWriter *bufio.Writer) {
+		outputWriter.WriteString(content)
+	},append)
+}
+
+//WriteFileContent 写入文件内容，目录|文件不存在则创建目录|文件
+//  Return  存在返回 true 不存在返回false
+func WriteFile(filename string, content *[]byte, append bool) (bool, error) {
+	return WriteFileByWriterFun(filename, func(outputWriter *bufio.Writer) {
+		outputWriter.Write(*content)
+	},append)
+}
+
+//WriteFileByWriter 写入文件内容，目录|文件不存在则创建目录|文件
+//  Return  存在返回 true 不存在返回false
+func WriteFileByWriterFun(filename string, writeFun func(*bufio.Writer), append bool) (bool, error) {
 	dir := filepath.Dir(filename)
 	if !CheckFileIsExist(dir) {
 		os.MkdirAll(dir, os.ModePerm)
@@ -72,7 +88,7 @@ func WriteFileContent(filename string, content string, append bool) (bool, error
 	outputWriter := bufio.NewWriter(outputFile)
 	defer outputWriter.Flush()
 	//写入内容
-	outputWriter.WriteString(content)
+	writeFun(outputWriter)
 	return true, nil
 }
 

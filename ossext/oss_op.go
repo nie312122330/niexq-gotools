@@ -3,11 +3,12 @@ package ossext
 import (
 	"errors"
 	"fmt"
+	"io"
+	"strings"
+
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/nie312122330/niexq-gotools/logext"
 	"go.uber.org/zap"
-	"io"
-	"strings"
 )
 
 var logger *zap.Logger
@@ -20,21 +21,21 @@ func init() {
 type OssConf struct {
 	BucketName      string `json:"bucketName"`
 	Endpoint        string `json:"endpoint"`
-	AccessKeyId     string `json:"accessKeyId"`
+	AccessKeyID     string `json:"accessKeyId"`
 	AccessKeySecret string `json:"accessKeySecret"`
 	OssKeyPrefix    string `json:"ossKeyPrefix"`
 }
 
 //CreateOssClient 创建OssClient
 func CreateOssClient(conf *OssConf) *oss.Client {
-	client, err := oss.New(conf.Endpoint, conf.AccessKeyId, conf.AccessKeySecret)
+	client, err := oss.New(conf.Endpoint, conf.AccessKeyID, conf.AccessKeySecret)
 	if err != nil {
 		panic(err)
 	}
 	return client
 }
 
-//CreateOssClient 创建OssBucket
+// CreateOssBucket 创建OssBucket
 func CreateOssBucket(conf *OssConf) *oss.Bucket {
 	client := CreateOssClient(conf)
 	bucket, err := client.Bucket(conf.BucketName)
@@ -97,7 +98,7 @@ func DirIsEmpty(bucket *oss.Bucket, dir string) (bool, error) {
 	return false, nil
 }
 
-//ListDirs 指定目录下的所有对象（文件|目录）
+// ListObjects 指定目录下的所有对象（文件|目录）
 //  bucket
 //  prefix 指定前缀，不能以/开头,根目录为空字符串
 func ListObjects(bucket *oss.Bucket, prefix string) ([]oss.ObjectProperties, error) {

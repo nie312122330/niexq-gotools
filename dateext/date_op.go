@@ -1,6 +1,6 @@
-// Now 来源于 https://github.com/noogo/date
 package dateext
 
+// dateext Now 来源于 https://github.com/noogo/date
 import (
 	"errors"
 	"fmt"
@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	ErrLayout = errors.New(`parse layout failed`)
+	errLayout = errors.New(`parse layout failed`)
 	monthAbbr = [...]string{
 		"Jan",
 		"Feb",
@@ -46,25 +46,30 @@ var (
 )
 
 type (
+	// Date ...
 	Date struct {
 		time.Time
 	}
 )
 
+// Now ..
 func Now() Date {
 	timeNow := time.Now()
 	return WithTime(timeNow)
 }
 
+// WithTime ..
 func WithTime(t time.Time) Date {
 	return Date{t}
 }
 
+// WithTimestamp ..
 func WithTimestamp(timestamp int64) Date {
 	t := time.Unix(timestamp, 0)
 	return WithTime(t)
 }
 
+// WithMillisecond ..
 func WithMillisecond(millisecond int64) Date {
 	sec := millisecond / 1e3
 	nsec := millisecond % (millisecond / 1e3)
@@ -72,19 +77,23 @@ func WithMillisecond(millisecond int64) Date {
 	return WithTime(t)
 }
 
+// WithDate ..
 func WithDate(year, month, date, hour, minute, second int) Date {
 	t := time.Date(year, time.Month(month), date, hour, minute, second, 0, time.Local)
 	return WithTime(t)
 }
 
+// Millisecond ..
 func Millisecond() int64 {
 	return time.Now().UnixNano() / 1e6
 }
 
+// Timestamp ..
 func Timestamp() int64 {
 	return time.Now().Unix()
 }
 
+// Format ...
 func (date Date) Format(layout string, chinese ...bool) (string, error) {
 	var c bool
 	if len(chinese) > 0 {
@@ -93,10 +102,10 @@ func (date Date) Format(layout string, chinese ...bool) (string, error) {
 	return date.parseLayout(layout, c)
 }
 
-// transfer layout to a date template,like  [yyyy-MM-dd] -> {{.year}}-{{.month}}-{{.day}}
+// parseLayout  transfer layout to a date template,like  [yyyy-MM-dd] -> {{.year}}-{{.month}}-{{.day}}
 func (date Date) parseLayout(layout string, chinese bool) (string, error) {
 	if len(strings.TrimSpace(layout)) == 0 {
-		return "", ErrLayout
+		return "", errLayout
 	}
 	ti := time.Unix(date.Unix(), date.UnixNano()/1e6%date.Unix())
 	year, monthNumber, dayOfMonth := date.Date()
@@ -116,10 +125,10 @@ func (date Date) parseLayout(layout string, chinese bool) (string, error) {
 		weekOfYear = 1
 	}
 	hour, minute, second := date.Clock()
-	unix:=date.Unix()
+	unix := date.Unix()
 	var millisecond int64
 	if unix > 0 {
-		unixNano:=date.UnixNano()
+		unixNano := date.UnixNano()
 		millisecond = unixNano % unix
 	}
 	rfc822z := ti.Format("-0700")

@@ -30,8 +30,8 @@ func TestPathSplit(t *testing.T) {
 	t.Log(PathFileNameWithSuffix("d:/ss/sss/sss.exe"))
 	t.Log(PathFileSuffix("d:/ss/sss/sss.exe"))
 
-	t.Log(JoinPath("./aaa","bbbb"))
-	t.Log(JoinPath("","/ccc/","tes.txe"))
-	t.Log(JoinPath("./aaa/","bbbb/","/dddd/exex/a.txt"))
+	t.Log(JoinPath("./aaa", "bbbb"))
+	t.Log(JoinPath("", "/ccc/", "tes.txe"))
+	t.Log(JoinPath("./aaa/", "bbbb/", "/dddd/exex/a.txt"))
 
 }

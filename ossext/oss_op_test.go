@@ -2,9 +2,10 @@ package ossext
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/nie312122330/niexq-gotools/fileext"
 	"github.com/nie312122330/niexq-gotools/jsonext"
-	"testing"
 )
 
 func TestCreateOssClient(t *testing.T) {
@@ -34,7 +35,7 @@ func TestListDir(t *testing.T) {
 
 func getOssConf() *OssConf {
 	var ocf OssConf
-	confJsonStr, _ := fileext.ReadFileContent("../main_conf.json")
-	jsonext.ToObj(&confJsonStr, &ocf)
+	confJSONStr, _ := fileext.ReadFileContent("../main_conf.json")
+	jsonext.ToObj(&confJSONStr, &ocf)
 	return &ocf
 }

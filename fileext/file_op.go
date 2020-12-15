@@ -11,33 +11,32 @@ import (
 	"strings"
 )
 
-
-//JoinPath 拼接路径
+// JoinPath 拼接路径
 func JoinPath(items ...string) string {
 	return path.Join(items...)
 }
 
-//PathDir 获取文件的目录
+// PathDir 获取文件的目录
 func PathDir(filePath string) string {
 	return strings.TrimSuffix(filePath, path.Base(filePath))
 }
 
-//PathFileSuffix 获取文件后缀名
+// PathFileSuffix 获取文件后缀名
 func PathFileSuffix(filePath string) string {
 	return path.Ext(filePath)
 }
 
-//PathFileName 获取文件名字不包含后缀
+// PathFileName 获取文件名字不包含后缀
 func PathFileName(filePath string) string {
 	return strings.TrimSuffix(PathFileNameWithSuffix(filePath), PathFileSuffix(filePath))
 }
 
-//PathFileNameWithSuffix 获取文件名字包含后缀
+// PathFileNameWithSuffix 获取文件名字包含后缀
 func PathFileNameWithSuffix(filePath string) string {
 	return path.Base(filePath)
 }
 
-//CheckFileIsExist 判断文件是否存在
+// CheckFileIsExist 判断文件是否存在
 //  Return  存在返回 true 不存在返回false
 func CheckFileIsExist(filename string) bool {
 	var exist = true
@@ -47,23 +46,23 @@ func CheckFileIsExist(filename string) bool {
 	return exist
 }
 
-//WriteFileContent 写入文件内容，目录|文件不存在则创建目录|文件
+// WriteFileContent 写入文件内容，目录|文件不存在则创建目录|文件
 //  Return  存在返回 true 不存在返回false
 func WriteFileContent(filename string, content string, append bool) (bool, error) {
 	return WriteFileByWriterFun(filename, func(outputWriter *bufio.Writer) {
 		outputWriter.WriteString(content)
-	},append)
+	}, append)
 }
 
-//WriteFileContent 写入文件内容，目录|文件不存在则创建目录|文件
+// WriteFile 写入文件内容，目录|文件不存在则创建目录|文件
 //  Return  存在返回 true 不存在返回false
 func WriteFile(filename string, content *[]byte, append bool) (bool, error) {
 	return WriteFileByWriterFun(filename, func(outputWriter *bufio.Writer) {
 		outputWriter.Write(*content)
-	},append)
+	}, append)
 }
 
-//WriteFileByWriter 写入文件内容，目录|文件不存在则创建目录|文件
+// WriteFileByWriterFun 写入文件内容，目录|文件不存在则创建目录|文件
 //  Return  存在返回 true 不存在返回false
 func WriteFileByWriterFun(filename string, writeFun func(*bufio.Writer), append bool) (bool, error) {
 	dir := filepath.Dir(filename)
@@ -92,7 +91,7 @@ func WriteFileByWriterFun(filename string, writeFun func(*bufio.Writer), append 
 	return true, nil
 }
 
-//ReadFileContent 读取文本文件内容
+// ReadFileByte 读取文本文件内容
 func ReadFileByte(filename string) ([]byte, error) {
 	if !CheckFileIsExist(filename) {
 		return nil, errors.New("文件不存在")
@@ -132,7 +131,7 @@ func TraverseDir(dirPth string, fileList *list.List) error {
 	return nil
 }
 
-//TraverseDir 递归文件夹获取到所有文件名称
+// TraverseDirBySlice 递归文件夹获取到所有文件名称
 //  dirPth 目录
 func TraverseDirBySlice(dirPth string) ([]string, error) {
 	dir, err := ioutil.ReadDir(dirPth)

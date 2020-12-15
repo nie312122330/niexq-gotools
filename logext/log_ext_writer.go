@@ -1,9 +1,10 @@
 package logext
 
 import (
-	rotateLogs "github.com/lestrrat-go/file-rotatelogs"
 	"io"
 	"time"
+
+	rotateLogs "github.com/lestrrat-go/file-rotatelogs"
 )
 
 /*GetRotationLogWriter 获取循环日志记录器

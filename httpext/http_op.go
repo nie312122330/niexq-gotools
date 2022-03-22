@@ -5,10 +5,19 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/nie312122330/niexq-gotools/jsonext"
 )
+
+var localProxy func(_ *http.Request) (*url.URL, error)
+
+func SetProxy(httpUrl string) {
+	localProxy = func(_ *http.Request) (*url.URL, error) {
+		return url.Parse(httpUrl)
+	}
+}
 
 // GetText 发送GetText请求
 // url：         请求地址
@@ -23,7 +32,8 @@ func GetText(url string, timeOut time.Duration) (string, error) {
 // Get 发送GET请求
 // url：         请求地址
 func Get(url string, timeOut time.Duration) ([]byte, error) {
-	client := &http.Client{Timeout: timeOut, Transport: &http.Transport{DisableKeepAlives: true}}
+
+	client := &http.Client{Timeout: timeOut, Transport: &http.Transport{DisableKeepAlives: true, Proxy: localProxy}}
 	resp, err := client.Get(url)
 	if err != nil {
 		return nil, err
@@ -54,7 +64,7 @@ func PostJSON(url string, data interface{}, timeOut time.Duration) (string, erro
 // content：     请求放回的内容
 func Post(url string, data interface{}, contentType string, timeOut time.Duration) (string, error) {
 	// 超时时间：5秒
-	client := &http.Client{Timeout: timeOut, Transport: &http.Transport{DisableKeepAlives: true}}
+	client := &http.Client{Timeout: timeOut, Transport: &http.Transport{DisableKeepAlives: true, Proxy: localProxy}}
 	jsonStr, _ := jsonext.ToJSONBytes(data)
 	resp, err := client.Post(url, contentType, bytes.NewBuffer(*jsonStr))
 	if err != nil {

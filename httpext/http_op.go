@@ -23,7 +23,7 @@ func GetText(url string, timeOut time.Duration) (string, error) {
 // Get 发送GET请求
 // url：         请求地址
 func Get(url string, timeOut time.Duration) ([]byte, error) {
-	client := &http.Client{Timeout: timeOut}
+	client := &http.Client{Timeout: timeOut, Transport: &http.Transport{DisableKeepAlives: true}}
 	resp, err := client.Get(url)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func PostJSON(url string, data interface{}, timeOut time.Duration) (string, erro
 // content：     请求放回的内容
 func Post(url string, data interface{}, contentType string, timeOut time.Duration) (string, error) {
 	// 超时时间：5秒
-	client := &http.Client{Timeout: timeOut}
+	client := &http.Client{Timeout: timeOut, Transport: &http.Transport{DisableKeepAlives: true}}
 	jsonStr, _ := jsonext.ToJSONBytes(data)
 	resp, err := client.Post(url, contentType, bytes.NewBuffer(*jsonStr))
 	if err != nil {

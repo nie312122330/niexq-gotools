@@ -14,6 +14,8 @@ var infoLevelFun zap.LevelEnablerFunc
 var warnLevelFun zap.LevelEnablerFunc
 var consoleLevelFun zap.LevelEnablerFunc
 
+var OUT_LOG_LEVEL = zapcore.DebugLevel
+
 //init 初始化
 func init() {
 	// 设置一些基本日志格式 具体含义还比较好理解，直接看zap源码也不难懂
@@ -32,14 +34,14 @@ func init() {
 		},
 	})
 	// 实现两个判断日志等级的interface
-	infoLevelFun = zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-		return lvl < zapcore.WarnLevel
+	infoLevelFun = zap.LevelEnablerFunc(func(level zapcore.Level) bool {
+		return level >= OUT_LOG_LEVEL && level <= zapcore.WarnLevel
 	})
-	warnLevelFun = zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-		return lvl >= zapcore.WarnLevel
+	warnLevelFun = zap.LevelEnablerFunc(func(level zapcore.Level) bool {
+		return level >= zapcore.WarnLevel
 	})
-	consoleLevelFun = zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-		return lvl >= zapcore.DebugLevel
+	consoleLevelFun = zap.LevelEnablerFunc(func(level zapcore.Level) bool {
+		return level >= OUT_LOG_LEVEL
 	})
 }
 

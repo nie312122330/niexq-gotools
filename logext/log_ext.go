@@ -33,7 +33,7 @@ func init() {
 			enc.AppendInt64(int64(d) / 1000000)
 		},
 	})
-	// 实现两个判断日志等级的interface
+	// 实现两个判断日志等级的
 	infoLevelFun = zap.LevelEnablerFunc(func(level zapcore.Level) bool {
 		return level >= OUT_LOG_LEVEL && level <= zapcore.WarnLevel
 	})

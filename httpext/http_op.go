@@ -77,3 +77,22 @@ func Post(url string, data interface{}, contentType string, timeOut time.Duratio
 	result, _ := ioutil.ReadAll(resp.Body)
 	return string(result), nil
 }
+
+// PostForm 发送PostForm请求
+// url：         请求地址
+// data：        POST请求提交的数据
+// content：     请求放回的内容
+func PostForm(reqUrl string, data url.Values, timeOut time.Duration) (string, error) {
+	// 超时时间：5秒
+	client := &http.Client{Timeout: timeOut, Transport: &http.Transport{DisableKeepAlives: true, Proxy: localProxy}}
+	resp, err := client.PostForm(reqUrl, data)
+	if err != nil {
+		return "", err
+	}
+	if resp.StatusCode != 200 {
+		return "", fmt.Errorf("返回非%d错误", resp.StatusCode)
+	}
+	defer resp.Body.Close()
+	result, _ := ioutil.ReadAll(resp.Body)
+	return string(result), nil
+}

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"time"
@@ -86,6 +87,34 @@ func PostForm(reqUrl string, data url.Values, timeOut time.Duration) (string, er
 	// 超时时间：5秒
 	client := &http.Client{Timeout: timeOut, Transport: &http.Transport{DisableKeepAlives: true, Proxy: localProxy}}
 	resp, err := client.PostForm(reqUrl, data)
+	if err != nil {
+		return "", err
+	}
+	if resp.StatusCode != 200 {
+		return "", fmt.Errorf("返回非%d错误", resp.StatusCode)
+	}
+	defer resp.Body.Close()
+	result, _ := ioutil.ReadAll(resp.Body)
+	return string(result), nil
+}
+
+// PostFile 发送PostFile，文件请求
+func PostFile(reqUrl string, fileBytes *[]byte, fileNameParamName, fileName string, extData url.Values, timeOut time.Duration) (string, error) {
+	// 超时时间：5秒
+	client := &http.Client{Timeout: timeOut, Transport: &http.Transport{DisableKeepAlives: true}}
+
+	bodyBuffer := &bytes.Buffer{}
+	bodyWriter := multipart.NewWriter(bodyBuffer)
+	defer bodyWriter.Close()
+
+	fileWriter1, _ := bodyWriter.CreateFormFile(fileNameParamName, fileName)
+	fileWriter1.Write(*fileBytes)
+	for key, value := range extData {
+		_ = bodyWriter.WriteField(key, value[0])
+	}
+	contentType := bodyWriter.FormDataContentType()
+
+	resp, err := client.Post(reqUrl, contentType, bodyBuffer)
 	if err != nil {
 		return "", err
 	}

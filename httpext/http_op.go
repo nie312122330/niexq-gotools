@@ -105,7 +105,6 @@ func PostFile(reqUrl string, fileBytes *[]byte, fileNameParamName, fileName stri
 
 	bodyBuffer := &bytes.Buffer{}
 	bodyWriter := multipart.NewWriter(bodyBuffer)
-	defer bodyWriter.Close()
 
 	fileWriter1, _ := bodyWriter.CreateFormFile(fileNameParamName, fileName)
 	fileWriter1.Write(*fileBytes)
@@ -113,6 +112,7 @@ func PostFile(reqUrl string, fileBytes *[]byte, fileNameParamName, fileName stri
 		_ = bodyWriter.WriteField(key, value[0])
 	}
 	contentType := bodyWriter.FormDataContentType()
+	bodyWriter.Close()
 
 	resp, err := client.Post(reqUrl, contentType, bodyBuffer)
 	if err != nil {

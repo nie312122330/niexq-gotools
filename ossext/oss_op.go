@@ -105,7 +105,7 @@ func ListObjects(bucket *oss.Bucket, prefix string) ([]oss.ObjectProperties, err
 	var result []oss.ObjectProperties
 	marker := oss.Marker("")
 	for {
-		lsRes, err := bucket.ListObjects(oss.Prefix(prefix), marker, oss.MaxKeys(200))
+		lsRes, err := bucket.ListObjects(oss.Prefix(prefix), marker, oss.MaxKeys(999))
 		if err != nil {
 			return result, err
 		}
@@ -129,7 +129,7 @@ func ListDirs(bucket *oss.Bucket, prefix string) ([]string, error) {
 	marker := oss.Marker("")
 	delimiter := oss.Delimiter("/")
 	for {
-		lsRes, err := bucket.ListObjects(oss.Prefix(prefix), marker, oss.MaxKeys(200), delimiter)
+		lsRes, err := bucket.ListObjects(oss.Prefix(prefix), marker, oss.MaxKeys(999), delimiter)
 		if err != nil {
 			return result, err
 		}

@@ -39,10 +39,10 @@ func TestPostForm(t *testing.T) {
 
 func TestPostFile(t *testing.T) {
 	fileBytes, err := fileext.ReadFileByte("http_op.go")
-	extData := url.Values{"dir": {"testd"}}
-	url := "http://192.168.0.253:10081/upload/multiFlies.do"
+	extData := url.Values{"filepath": {"test.txt"}}
+	url := "http://127.0.0.1:29833/upfile"
 
-	str, err := PostFile(url, &fileBytes, "multiFiles", "file.txt", extData, time.Second*10)
+	str, err := PostFile(url, &fileBytes, "file", "file.txt", extData, time.Second*10)
 	if nil != err {
 		t.Log(err.Error())
 	} else {

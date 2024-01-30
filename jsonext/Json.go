@@ -47,6 +47,15 @@ func SonicMap2AstNode(data map[string]interface{}) ast.Node {
 	return node
 }
 
+func SonicMap2Obj(data map[string]interface{}, t interface{}) error {
+	str := Sonic2StrOk(data)
+	err := sonic.UnmarshalString(str, &t)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // ToStrOk 对象转换为Str
 // t 任意对象，注意取地址传入
 func ToStrOk(t interface{}) string {

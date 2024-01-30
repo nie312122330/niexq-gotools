@@ -42,6 +42,11 @@ func Sonic2AstNode(str string) (ast.Node, error) {
 	return root, err
 }
 
+func SonicMap2AstNode(data map[string]interface{}) ast.Node {
+	node, _ := Sonic2AstNode(Sonic2StrOk(data))
+	return node
+}
+
 // ToStrOk 对象转换为Str
 // t 任意对象，注意取地址传入
 func ToStrOk(t interface{}) string {

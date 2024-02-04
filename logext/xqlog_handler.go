@@ -90,7 +90,7 @@ func caller(r slog.Record) (caller, funcStr string) {
 		if len(funcArr) > 1 {
 			funcName = funcArr[1]
 		}
-		return fmt.Sprintf("%s:%-5d", pathStr, int64(ec.Line)), funcName
+		return fmt.Sprintf("%s:%d", pathStr, int64(ec.Line)), funcName
 	} else {
 		return "unknown:0", "unknown"
 	}

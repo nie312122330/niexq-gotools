@@ -59,15 +59,9 @@ func (h *XqLogHandler) Handle(ctx context.Context, r slog.Record) error {
 
 	callerStr, funcStr := caller(r)
 
-	if len(callerStr) > 43 {
-		callerStr = callerStr[0:20] + "..." + callerStr[len(callerStr)-20:]
-	}
-	sb.WriteString(fmt.Sprintf("%-43s ", callerStr))
+	sb.WriteString(fmt.Sprintf("%s ", callerStr))
 
-	if len(funcStr) > 16 {
-		funcStr = funcStr[0:6] + "..." + funcStr[len(funcStr)-7:]
-	}
-	sb.WriteString(fmt.Sprintf("%-16s ", funcStr))
+	sb.WriteString(fmt.Sprintf("%s ", funcStr))
 
 	sb.WriteString(r.Message + "\n")
 

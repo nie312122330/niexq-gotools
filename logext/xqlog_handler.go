@@ -16,9 +16,10 @@ import (
 const TimeLayout = "2006-01-02 15:04:05.000"
 
 type XqLogHandler struct {
-	Level  slog.Leveler
-	Stdout bool
-	out    io.Writer
+	Level      slog.Leveler
+	PrintMehod int // 0-不打印 ，1-详情,2-仅方法名称
+	Stdout     bool
+	out        io.Writer
 }
 
 func CreateRotateFileWriter(name string) *rotatelogs.RotateLogs {
@@ -57,11 +58,13 @@ func (h *XqLogHandler) Handle(ctx context.Context, r slog.Record) error {
 	}
 	sb.WriteString(fmt.Sprintf("%-5s ", r.Level.String()))
 
-	callerStr, funcStr := caller(r)
+	callerStr, funcStr := h.caller(r)
 
 	sb.WriteString(fmt.Sprintf("%s ", callerStr))
 
-	sb.WriteString(fmt.Sprintf("%s ", funcStr))
+	if h.PrintMehod > 0 {
+		sb.WriteString(fmt.Sprintf("%s ", funcStr))
+	}
 
 	sb.WriteString(r.Message + "\n")
 
@@ -73,7 +76,7 @@ func (h *XqLogHandler) Handle(ctx context.Context, r slog.Record) error {
 	return err
 }
 
-func caller(r slog.Record) (caller, funcStr string) {
+func (h *XqLogHandler) caller(r slog.Record) (caller, funcStr string) {
 	if r.PC != 0 {
 		fs := runtime.CallersFrames([]uintptr{r.PC})
 		ec, _ := fs.Next()
@@ -85,10 +88,14 @@ func caller(r slog.Record) (caller, funcStr string) {
 				pathStr = ec.File[idx+1:]
 			}
 		}
-		funcArr := strings.Split(ec.Func.Name(), ".")
-		funcName := "unknown"
-		if len(funcArr) > 1 {
-			funcName = funcArr[1]
+		funcName := ""
+		if h.PrintMehod > 0 {
+			if h.PrintMehod == 1 {
+				funcName = ec.Func.Name()
+			} else {
+				funcName = ec.Func.Name()
+				funcName = funcName[strings.LastIndex(funcName, ".")+1:]
+			}
 		}
 		return fmt.Sprintf("%s:%d", pathStr, int64(ec.Line)), funcName
 	} else {

@@ -34,8 +34,8 @@ func CreateRotateFileWriter(name string) *rotatelogs.RotateLogs {
 	return logf
 }
 
-func SlogHandlerNew(out io.Writer, level slog.Leveler, stdout bool) *XqLogHandler {
-	h := &XqLogHandler{Level: level, out: out, Stdout: stdout}
+func SlogHandlerNew(out io.Writer, level slog.Leveler, stdout bool, printMethod int) *XqLogHandler {
+	h := &XqLogHandler{Level: level, out: out, Stdout: stdout, PrintMehod: printMethod}
 	return h
 }
 

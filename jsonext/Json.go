@@ -2,6 +2,7 @@ package jsonext
 
 import (
 	"encoding/json"
+	"log/slog"
 
 	"github.com/bytedance/sonic"
 	"github.com/bytedance/sonic/ast"
@@ -9,6 +10,33 @@ import (
 
 func init() {
 
+}
+
+func SonicGetBool(ast ast.Node, path ...interface{}) bool {
+	result, err := ast.GetByPath(path).Bool()
+	if nil != err {
+		slog.Error(err.Error())
+		return false
+	}
+	return result
+}
+
+func SonicGetInt64(ast ast.Node, path ...interface{}) int64 {
+	result, err := ast.GetByPath(path).Int64()
+	if nil != err {
+		slog.Error(err.Error())
+		return -1
+	}
+	return result
+}
+
+func SonicGetString(ast ast.Node, path ...interface{}) string {
+	result, err := ast.GetByPath(path).String()
+	if nil != err {
+		slog.Error(err.Error())
+		return ""
+	}
+	return result
 }
 
 func Sonic2JsonBytes(t interface{}) (*[]byte, error) {

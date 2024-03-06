@@ -13,7 +13,7 @@ func init() {
 }
 
 func SonicGetBool(ast ast.Node, path ...interface{}) bool {
-	result, err := ast.GetByPath(path).Bool()
+	result, err := ast.GetByPath(path...).Bool()
 	if nil != err {
 		slog.Error(err.Error())
 		return false
@@ -22,7 +22,7 @@ func SonicGetBool(ast ast.Node, path ...interface{}) bool {
 }
 
 func SonicGetInt64(ast ast.Node, path ...interface{}) int64 {
-	result, err := ast.GetByPath(path).Int64()
+	result, err := ast.GetByPath(path...).Int64()
 	if nil != err {
 		slog.Error(err.Error())
 		return -1
@@ -31,7 +31,7 @@ func SonicGetInt64(ast ast.Node, path ...interface{}) int64 {
 }
 
 func SonicGetString(ast ast.Node, path ...interface{}) string {
-	result, err := ast.GetByPath(path).String()
+	result, err := ast.GetByPath(path...).String()
 	if nil != err {
 		slog.Error(err.Error())
 		return ""

@@ -66,7 +66,13 @@ func (h *XqLogHandler) Handle(ctx context.Context, r slog.Record) error {
 		sb.WriteString(fmt.Sprintf("%s ", funcStr))
 	}
 
-	sb.WriteString(r.Message + "\n")
+	sb.WriteString(r.Message + " ")
+
+	r.Attrs(func(a slog.Attr) bool {
+		sb.WriteString(a.String())
+		return true
+	})
+	sb.WriteString("\n")
 
 	printData := []byte(sb.String())
 	_, err := h.out.Write(printData)

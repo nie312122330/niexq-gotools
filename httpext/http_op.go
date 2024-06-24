@@ -3,6 +3,7 @@ package httpext
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
@@ -75,7 +76,7 @@ func Post(url string, data interface{}, contentType string, timeOut time.Duratio
 		return "", fmt.Errorf("返回非%d错误", resp.StatusCode)
 	}
 	defer resp.Body.Close()
-	result, _ := ioutil.ReadAll(resp.Body)
+	result, _ := io.ReadAll(resp.Body)
 	return string(result), nil
 }
 
@@ -122,6 +123,6 @@ func PostFile(reqUrl string, fileBytes *[]byte, fileNameParamName, fileName stri
 		return "", fmt.Errorf("返回非%d错误", resp.StatusCode)
 	}
 	defer resp.Body.Close()
-	result, _ := ioutil.ReadAll(resp.Body)
+	result, _ := io.ReadAll(resp.Body)
 	return string(result), nil
 }

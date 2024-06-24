@@ -4,20 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log/slog"
 	"strings"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	"github.com/nie312122330/niexq-gotools/logext"
-	"go.uber.org/zap"
 )
 
-var logger *zap.Logger
-
-func init() {
-	logger = logext.LogLogger()
-}
-
-//OssConf 配置文件
+// OssConf 配置文件
 type OssConf struct {
 	BucketName      string `json:"bucketName"`
 	Endpoint        string `json:"endpoint"`
@@ -26,7 +19,7 @@ type OssConf struct {
 	OssKeyPrefix    string `json:"ossKeyPrefix"`
 }
 
-//CreateOssClient 创建OssClient
+// CreateOssClient 创建OssClient
 func CreateOssClient(conf *OssConf) *oss.Client {
 	client, err := oss.New(conf.Endpoint, conf.AccessKeyID, conf.AccessKeySecret)
 	if err != nil {
@@ -45,8 +38,9 @@ func CreateOssBucket(conf *OssConf) *oss.Bucket {
 	return bucket
 }
 
-//PubObjectFromFile 上传文件
-//  dir 目录，不能以/开始，必须以/结尾
+// PubObjectFromFile 上传文件
+//
+//	dir 目录，不能以/开始，必须以/结尾
 func PubObjectFromFile(bucket *oss.Bucket, objKey string, filePath string) error {
 	err := bucket.PutObjectFromFile(objKey, filePath)
 	if nil != err {
@@ -55,8 +49,9 @@ func PubObjectFromFile(bucket *oss.Bucket, objKey string, filePath string) error
 	return nil
 }
 
-//PubObjectFromIoReader 上传文件
-//  dir 目录，不能以/开始，必须以/结尾
+// PubObjectFromIoReader 上传文件
+//
+//	dir 目录，不能以/开始，必须以/结尾
 func PubObjectFromIoReader(bucket *oss.Bucket, objKey string, ioReader *io.Reader) error {
 	err := bucket.PutObject(objKey, *ioReader)
 	if nil != err {
@@ -65,7 +60,7 @@ func PubObjectFromIoReader(bucket *oss.Bucket, objKey string, ioReader *io.Reade
 	return nil
 }
 
-//DelObject 删除单个Object
+// DelObject 删除单个Object
 func DelObject(bucket *oss.Bucket, key string) error {
 	//如果为/结尾则需要检查目录是否为空
 	if strings.HasSuffix(key, "/") {
@@ -74,7 +69,7 @@ func DelObject(bucket *oss.Bucket, key string) error {
 			return err
 		}
 		if !empty {
-			logger.Warn(fmt.Sprintf("目录%s非空", key))
+			slog.Warn(fmt.Sprintf("目录%s非空", key))
 			return errors.New("目录非空")
 		}
 	}
@@ -85,8 +80,9 @@ func DelObject(bucket *oss.Bucket, key string) error {
 	return nil
 }
 
-//DirIsEmpty 目录是否非空
-//  dir 目录，不能以/开始，必须以/结尾
+// DirIsEmpty 目录是否非空
+//
+//	dir 目录，不能以/开始，必须以/结尾
 func DirIsEmpty(bucket *oss.Bucket, dir string) (bool, error) {
 	lsRes, err := bucket.ListObjects(oss.Prefix(dir), oss.MaxKeys(1))
 	if nil != err {
@@ -99,8 +95,9 @@ func DirIsEmpty(bucket *oss.Bucket, dir string) (bool, error) {
 }
 
 // ListObjects 指定目录下的所有对象（文件|目录）
-//  bucket
-//  prefix 指定前缀，不能以/开头,根目录为空字符串
+//
+//	bucket
+//	prefix 指定前缀，不能以/开头,根目录为空字符串
 func ListObjects(bucket *oss.Bucket, prefix string) ([]oss.ObjectProperties, error) {
 	var result []oss.ObjectProperties
 	marker := oss.Marker("")
@@ -109,9 +106,7 @@ func ListObjects(bucket *oss.Bucket, prefix string) ([]oss.ObjectProperties, err
 		if err != nil {
 			return result, err
 		}
-		for _, object := range lsRes.Objects {
-			result = append(result, object)
-		}
+		result = append(result, lsRes.Objects...)
 		marker = oss.Marker(lsRes.NextMarker)
 		//如果已全部返回则中断
 		if !lsRes.IsTruncated {
@@ -121,9 +116,10 @@ func ListObjects(bucket *oss.Bucket, prefix string) ([]oss.ObjectProperties, err
 	return result, nil
 }
 
-//ListDirs 指定目录下的所有目录
-//  bucket
-//  prefix 指定前缀，不能以/开头,根目录为空字符串
+// ListDirs 指定目录下的所有目录
+//
+//	bucket
+//	prefix 指定前缀，不能以/开头,根目录为空字符串
 func ListDirs(bucket *oss.Bucket, prefix string) ([]string, error) {
 	var result []string
 	marker := oss.Marker("")
@@ -133,9 +129,7 @@ func ListDirs(bucket *oss.Bucket, prefix string) ([]string, error) {
 		if err != nil {
 			return result, err
 		}
-		for _, object := range lsRes.CommonPrefixes {
-			result = append(result, object)
-		}
+		result = append(result, lsRes.CommonPrefixes...)
 		marker = oss.Marker(lsRes.NextMarker)
 		//如果已全部返回则中断
 		if !lsRes.IsTruncated {

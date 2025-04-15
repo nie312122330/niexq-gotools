@@ -7,7 +7,9 @@ require (
 	github.com/bytedance/sonic v1.13.2
 	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
+	github.com/maruel/natural v1.1.1
 	go.uber.org/zap v1.27.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (

@@ -11,9 +11,12 @@ import (
 	"time"
 
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	"github.com/timandy/routine"
 )
 
 const TimeLayout = "2006-01-02 15:04:05.000"
+
+var LogTracdIdThreadLocal = routine.NewInheritableThreadLocal[string]()
 
 type XqLogHandler struct {
 	Level      slog.Leveler
@@ -57,9 +60,9 @@ func (h *XqLogHandler) Handle(ctx context.Context, r slog.Record) error {
 		sb.WriteString(fmt.Sprintf("%-23s ", r.Time.Format(TimeLayout)))
 	}
 	sb.WriteString(fmt.Sprintf("%-5s ", r.Level.String()))
+	sb.WriteString(fmt.Sprintf("%s ", LogTracdIdThreadLocal.Get()))
 
 	callerStr, funcStr := h.caller(r)
-
 	sb.WriteString(fmt.Sprintf("%s ", callerStr))
 
 	if h.PrintMehod > 0 {
@@ -72,6 +75,9 @@ func (h *XqLogHandler) Handle(ctx context.Context, r slog.Record) error {
 		sb.WriteString(a.String())
 		return true
 	})
+	aa := context.Background().Value("aaa")
+	fmt.Println(aa)
+
 	sb.WriteString("\n")
 
 	printData := []byte(sb.String())

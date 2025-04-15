@@ -75,8 +75,6 @@ func (h *XqLogHandler) Handle(ctx context.Context, r slog.Record) error {
 		sb.WriteString(a.String())
 		return true
 	})
-	aa := context.Background().Value("aaa")
-	fmt.Println(aa)
 
 	sb.WriteString("\n")
 
